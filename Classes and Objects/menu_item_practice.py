@@ -23,8 +23,10 @@ class MenuItem:
     def mark_unavailable(self):
         self.is_available = False
         print(f"{self.name} is now marked as unavailable.")
-briyani = MenuItem("Briyani", 150)
-briyani.display()  # Output: Briyani: ₹150.00 - Available
-briyani.update_price(160)  # Output: Updated Briyani price from ₹150.00 to ₹160.00. and the price is updated successfully.
-briyani.mark_unavailable()  # Output: Briyani is now marked as unavailable.
-briyani.display()  # Output: Briyani: ₹160.00 - Not Available
+        
+if __name__ == "__main__":
+    briyani = MenuItem("Briyani", 150)
+    briyani.display()  # Output: Briyani: ₹150.00 - Available
+    briyani.update_price(160)  # Output: Updated Briyani price from ₹150.00 to ₹160.00. and the price is updated successfully.
+    briyani.mark_unavailable()  # Output: Briyani is now marked as unavailable.
+    briyani.display()  # Output: Briyani: ₹160.00 - Not Available
