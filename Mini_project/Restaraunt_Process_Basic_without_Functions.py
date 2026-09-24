@@ -12,7 +12,7 @@ while True:
     print("3. Calculate bill")
     print("4. Daily sales report")
     print("5. Exit")
-    
+
     try:
         choice = int(input("Enter your choice: "))
     except ValueError as e:
@@ -52,4 +52,3 @@ while True:
     elif choice == 5:
         print("Exiting...")
         break
-
