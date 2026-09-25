@@ -11,6 +11,7 @@ class Order:
         self.table_number = table_number
         self.order_items = []
         self.gst_rate = gst_rate
+        self.order_status = "Draft"
 
     def add_order_item(self, order_item):
         if not isinstance(order_item, OrderItem):
@@ -39,14 +40,19 @@ class Order:
 
     def display_order(self):
         if not self.order_items:
-            return(
-                f"Order ID: {self.order_counter}\n"
-                
+            return (
+                f"Order ID: {self.order_id}\n"
+                f"Table Number: {self.table_number}\n"
+                "The order is empty."
             )
+        if self.order_status == "Cancelled":
+            return f"Order ID: {self.order_id} has been cancelled"
+
         lines = []
         lines.append("========== Restaurant Bill ==========")
-        lines.append(f"Order Number: {self.order_counter}")
+        lines.append(f"Order Number: {self.order_id}")
         lines.append(f"Table Number: {self.table_number}")
+        lines.append(f"Status: {self.order_status}")
         for order_item in self.order_items:
             lines.append(
                 f"{order_item.menu_item.name} X {order_item.quantity} = {order_item.calculate_subtotal():.2f}"
@@ -57,6 +63,22 @@ class Order:
         lines.append(f"Grand Total: {self.calculate_total():.2f}")
 
         return "\n".join(lines)
+
+    def update_status(self, requested_status):
+        if (self.order_status == "Draft") and (
+            requested_status == "Confirmed" or requested_status == "Cancelled"
+        ):
+            self.order_status = requested_status
+        elif (self.order_status == "Confirmed") and (
+            requested_status == "Preparing" or requested_status == "Cancelled"
+        ):
+            self.order_status = requested_status
+        elif (self.order_status == "Preparing") and (requested_status == "Ready"):
+            self.order_status = requested_status
+        elif (self.order_status == "Ready") and (requested_status == "Completed"):
+            self.order_status = requested_status
+        else:
+            print(f"The status {requested_status} is not allowed try a valid one")
 
 
 if __name__ == "__main__":
@@ -78,3 +100,9 @@ if __name__ == "__main__":
     print(orders_1.display_order())
     print(orders.order_id)
     print(orders_1.order_id)
+    empty_order = Order(3)
+    print(empty_order.display_order())
+    orders_1.update_status("Cancelled")
+    print(orders_1.display_order())
+    orders_1.update_status("Preparing")
+    print(orders_1.display_order())
