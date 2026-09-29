@@ -16,15 +16,21 @@ class Order:
     def add_order_item(self, order_item):
         if not isinstance(order_item, OrderItem):
             raise TypeError(f"{order_item} is not an instance of OrderItem.")
-        self.order_items.append(order_item)
-
+        if self.order_status == "Completed":
+            raise ValueError("Completed orders cannot be modified.")
+        if self.order_status == "Cancelled":
+            raise ValueError("Cancelled orders cannot be modified.")
+        
     def remove_order_item(self, order_item):
         if not isinstance(order_item, OrderItem):
             raise TypeError(f"{order_item} is not an instance of OrderItem.")
-        elif order_item in self.order_items:
-            self.order_items.remove(order_item)
-        else:
+        if self.order_status == "Completed":
+            raise ValueError("Completed orders cannot be modified.")
+        if self.order_status == "Cancelled":
+            raise ValueError("Cancelled orders cannot be modified.")
+        if order_item not in self.order_items:
             raise ValueError(f"{order_item} is not in the order items list.")
+        self.order_items.remove(order_item)
 
     def calculate_subtotal(self):
         total = 0
@@ -78,7 +84,9 @@ class Order:
         elif (self.order_status == "Ready") and (requested_status == "Completed"):
             self.order_status = requested_status
         else:
-            print(f"The status {requested_status} is not allowed try a valid one")
+            raise ValueError(
+                f"Cannot change order status from {self.order_status} to {requested_status}."
+            )
 
 
 if __name__ == "__main__":
@@ -102,7 +110,8 @@ if __name__ == "__main__":
     print(orders_1.order_id)
     empty_order = Order(3)
     print(empty_order.display_order())
-    orders_1.update_status("Cancelled")
+    orders_1.update_status("Completed")
     print(orders_1.display_order())
+    orders_1.add_order_item(order_for_table_2)
     orders_1.update_status("Preparing")
     print(orders_1.display_order())
